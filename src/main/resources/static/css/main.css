@@ -1,0 +1,23 @@
+.abc {
+    width:85vw;
+}
+
+.tab-btn {
+    border: none;
+}
+
+.bac {
+    background-color: red;
+}
+
+
+.w200 {
+    min-width: 200px;
+}
+.w400 {
+    min-width: 400px;
+}
+
+.w600 {
+    min-width: 600px;
+}

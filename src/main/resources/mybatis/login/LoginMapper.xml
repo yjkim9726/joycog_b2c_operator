@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.emotiv.api.login.repository.LoginRepository">
+    <select id="isValidUser" resultType="com.emotiv.api.login.mobel.OperatorEntity">
+        SELECT *
+        FROM tb_operator
+        <where>
+            <if test="operatorId != null">
+                AND operator_id = #{operatorId}
+            </if>
+            <if test="loginId != null">
+                AND login_id = #{loginId}
+            </if>
+            <if test="password != null">
+                AND password = #{password}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.emotiv.api.user.repository.UserRepository">
+    <select id="getMemberId" resultType="int">
+        SELECT member_id
+        FROM tb_member
+        WHERE uid = #{uid}
+    </select>
+
+    <select id="basicInfo" resultType="com.emotiv.api.user.model.UserBasicInfoVo">
+        SELECT
+            member.uid,
+            member.reg_date as createAccountDate,
+            member.mod_date as lastAccessDate,
+            member.platform as os,
+            (SELECT version FROM tb_system_info WHERE reg_date <![CDATA[<=]]> member.mod_date ORDER BY reg_date DESC LIMIT 1) as version,
+            goods.gold as gold,
+            COALESCE(I.C10_count, 0) AS countC10,
+            COALESCE(I.C20_count, 0) AS countC20,
+            COALESCE(I.C30_count, 0) AS countC30,
+            COALESCE(I.C40_count, 0) AS countC40,
+            COALESCE(I.C50_count, 0) AS countC50,
+            (SELECT SUM(CASE WHEN item_type = 'C10' THEN 1 ELSE 0 END) FROM tb_tool_item) AS maxCountC10,
+            (SELECT SUM(CASE WHEN item_type = 'C20' THEN 1 ELSE 0 END) FROM tb_tool_item) AS maxCountC20,
+            (SELECT SUM(CASE WHEN item_type = 'C30' THEN 1 ELSE 0 END) FROM tb_tool_item) AS maxCountC30,
+            (SELECT SUM(CASE WHEN item_type = 'C40' THEN 1 ELSE 0 END) FROM tb_tool_item) AS maxCountC40,
+            (SELECT SUM(CASE WHEN item_type = 'C50' THEN 1 ELSE 0 END) FROM tb_tool_item) AS maxCountC50,
+            COALESCE(F.G10_stage, 0) AS stageG10,
+            COALESCE(F.G11_stage, 0) AS stageG11,
+            COALESCE(F.G12_stage, 0) AS stageG12
+        FROM tb_member member
+            JOIN tb_system_info sys ON member.platform = sys.platform
+            JOIN (SELECT value as gold FROM tb_goods WHERE member_id = #{memberId} AND goods_code = 'M01') goods
+            RIGHT JOIN (SELECT
+                  member_id,
+                  SUM(CASE WHEN item_type = 'C10' THEN 1 ELSE 0 END) AS C10_count,
+                  SUM(CASE WHEN item_type = 'C20' THEN 1 ELSE 0 END) AS C20_count,
+                  SUM(CASE WHEN item_type = 'C30' THEN 1 ELSE 0 END) AS C30_count,
+                  SUM(CASE WHEN item_type = 'C40' THEN 1 ELSE 0 END) AS C40_count,
+                  SUM(CASE WHEN item_type = 'C50' THEN 1 ELSE 0 END) AS C50_count
+              FROM tb_inventory
+              WHERE member_id = #{memberId}
+              GROUP BY member_id
+             ) I ON member.member_id = I.member_id
+                 LEFT JOIN (
+            SELECT
+                member_id,
+                COALESCE(MAX(CASE WHEN f.game_code = 'G10' AND f.clear_yn ='Y' THEN stage END), '-') AS G10_stage,
+                COALESCE(MAX(CASE WHEN f.game_code = 'G11' AND f.clear_yn ='Y' THEN stage END), '-') AS G11_stage,
+                COALESCE(MAX(CASE WHEN f.game_code = 'G12' AND f.clear_yn ='Y' THEN stage END), '-') AS G12_stage
+            FROM tb_force_play_his f
+                     LEFT JOIN (SELECT stage_id,stage FROM tb_tool_stage WHERE use_yn = 'Y') S ON f.stage_id = S.stage_id
+            WHERE (f.game_code = 'G10' OR f.game_code = 'G11' OR f.game_code = 'G12') AND f.member_id = #{memberId}
+            GROUP BY f.member_id
+        ) F ON member.member_id = F.member_id
+    </select>
+</mapper>

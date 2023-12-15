@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.emotiv.common.api.repository.ActionLogRepository">
+    <insert id="insertMemberLog">
+        /**
+        사용자 행동로그 삽입
+        ActionLogMapper.xml
+        id = insertMemberLog
+        */
+        INSERT INTO tb_member_log (member_id,
+                                   log_code,
+                                   value,
+                                   gold)
+        VALUES (#{memberId},
+                #{logCode},
+                #{value},
+                #{gold}
+               )
+    </insert>
+
+    <select id="goldInfo" resultType="com.emotiv.api.user.model.UserGoldInfoVo">
+        SELECT log.reg_date as date,
+               code.log_description as logDescription,
+               log.value,
+               log.gold
+        FROM tb_member_log log
+        JOIN tb_log_code code ON log.log_code = code.log_code
+        WHERE member_id = #{memberId}
+        AND log.log_code IN ('L00008', 'L00014', 'L00015')
+        ORDER BY log.reg_date desc
+    </select>
+</mapper>

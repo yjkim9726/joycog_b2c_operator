@@ -1,0 +1,23 @@
+# Spring Setting
+spring:
+  config:
+    activate:
+      on-profile: local
+  database:
+    datasource:
+      hikari:
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        jdbc-url: jdbc:log4jdbc:mysql://joycogb2c-dev.czz449rkhvcg.ap-northeast-2.rds.amazonaws.com:3306/joycogb2c_dev
+        username: admin
+        password: emotiv1123!
+  log:
+    datasource:
+      hikari:
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        jdbc-url: jdbc:log4jdbc:mysql://joycogb2c-dev.czz449rkhvcg.ap-northeast-2.rds.amazonaws.com:3306/joycogb2c_log
+        username: admin
+        password: emotiv1123!
+
+## Logger
+logging:
+  config: classpath:logback/logback-local.xml

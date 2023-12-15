@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <script src="js/userInfo.js"></script>
+    <link href="css/main.css" rel="stylesheet">
+
+    <th:block th:replace="config :: configFragment"></th:block>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <div th:replace="./common::sidebarFragment"></div>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <div th:replace="./common::navFragment"></div>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">유저 정보 조회</h1>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" id="uid" class="form-control bg-gray-300 border-0 small" placeholder="UID 7자리 입력" aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="search_btn">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <p class="d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100" style="color: darkred;" id="search-text">존재하지 않는 UID 입니다.</p>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div style="margin-top: 20px;">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <ul class="nav nav-pills abc" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link tab-btn active" id="btn-userInfo" data-bs-toggle="pill" data-bs-target="#userInfo" type="button" role="tab" aria-controls="userInfo" aria-selected="true">기본 정보</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link tab-btn" id="btn-goldInfo" data-bs-toggle="pill" data-bs-target="#goldInfo" type="button" role="tab" aria-controls="goldInfo" aria-selected="false">골드 변동 내역</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade" id="userInfo" role="tabpanel" aria-labelledby="btn-userInfo">
+                                    <table id="tableUserInfo" class="table table-bordered table-size">
+                                            <tbody>
+                                            <tr>
+                                                <th class="w400">UID</th>
+                                                <td id="td_uid" class="w600"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="">계정 생성일</th>
+                                                <td id="td_createAccountDate"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="">최종 접속일</th>
+                                                <td id="td_lastAccessDate"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="">OS</th>
+                                                <td id="td_os"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="">클라이언트 버전</th>
+                                                <td id="td_version"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="">보유 골드</th>
+                                                <td id="td_gold"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="" rowspan="5">보유 아이템</th>
+                                                <td id="td_C10">캐릭터 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_C20">탐사선 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_C30">부스터 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_C40">펫 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_C50">오로라 : </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="" rowspan="3">스테이지 정보</th>
+                                                <td id="td_G10">캐롯러너 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_G11">컬러슈터 : </td>
+                                            </tr>
+                                            <tr>
+                                                <td id="td_G12">점핑래빗 : </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div class="tab-pane fade" id="goldInfo" role="tabpanel" aria-labelledby="btn-goldInfo">
+                                    <table id="tableGoldInfo" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="w200">일시</th>
+                                            <th scope="col" class="w200">변동 사유</th>
+                                            <th scope="col" class="w200">변동 사유(Sub)</th>
+                                            <th scope="col" class="w200">최종 보유량</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <div th:replace="./common::footerFragment"></div>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+</body>
+
+</html>
